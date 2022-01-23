@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 option(HUNTER_ENABLED "Enable Hunter package manager support" OFF)
-option(SUPERBUILD "Build dependencies" ON)
+option(SUPERBUILD "Build dependencies" OFF)
 option(BUILD_MAVSDK_SERVER "Build mavsdk_server" OFF)
 option(BUILD_SHARED_LIBS "Build core as shared libraries instead of static ones" ON)
 
@@ -9,12 +9,13 @@ if(SUPERBUILD AND HUNTER_ENABLED)
     message(FATAL_ERROR "Cannot SUPERBUILD while HUNTER_ENABLED. Set -DSUPERBUILD=OFF when using Hunter")
 endif()
 
-execute_process(
-    COMMAND git describe --abbrev=8 --dirty --always --tags
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    OUTPUT_VARIABLE VERSION_STR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+#execute_process(
+#    COMMAND git describe --abbrev=8 --dirty --always --tags
+#    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#    OUTPUT_VARIABLE VERSION_STR
+#    OUTPUT_STRIP_TRAILING_WHITESPACE
+#)
+set(VERSION_STR v1.0.8-2-g5806dc04-dirty)
 
 message(STATUS "Version: ${VERSION_STR}")
 STRING(REGEX REPLACE v\([0-9]+\).[0-9]+.[0-9]+.*$ \\1 MAVSDK_VERSION_MAJOR "${VERSION_STR}")
@@ -30,8 +31,8 @@ set(MAVSDK_VERSION_STRING ${MAVSDK_VERSION_MAJOR}.${MAVSDK_VERSION_MINOR}.${MAVS
 
 include("src/cmake/HunterGate.cmake")
 HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.315.tar.gz"
-    SHA1 "ea5d72afc0df67f2126e7fd069f20c5f723709e1"
+#    URL "https://github.com/cpp-pm/hunter/archive/v0.23.315.tar.gz"
+#    SHA1 "ea5d72afc0df67f2126e7fd069f20c5f723709e1"
 )
 
 
