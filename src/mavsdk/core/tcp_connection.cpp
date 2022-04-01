@@ -196,14 +196,15 @@ void TcpConnection::receive()
         if (recv_len == 0) {
             // This can happen when shutdown is called on the socket,
             // therefore we check _should_exit again.
-            _is_ok = false;
+             LogErr() << "recv_len is zero";
+            //_is_ok = false;
             continue;
         }
 
         if (recv_len < 0) {
             // This happens on desctruction when close(_socket_fd) is called,
             // therefore be quiet.
-            // LogErr() << "recvfrom error: " << GET_ERROR(errno);
+             LogErr() << "recvfrom error: " << GET_ERROR(errno);
             // Something went wrong, we should try to re-connect in next iteration.
             _is_ok = false;
             continue;

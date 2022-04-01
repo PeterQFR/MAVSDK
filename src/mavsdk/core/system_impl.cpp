@@ -11,7 +11,7 @@
 #include <utility>
 
 // Set to 1 to log incoming/outgoing mavlink messages.
-#define MESSAGE_DEBUGGING 0
+#define MESSAGE_DEBUGGING 1
 
 namespace mavsdk {
 
@@ -48,6 +48,7 @@ SystemImpl::~SystemImpl()
 
 void SystemImpl::init(uint8_t system_id, uint8_t comp_id, bool connected)
 {
+    LogErr() << "Initialising System" << system_id << " " << comp_id ;
     _target_address.system_id = system_id;
     // FIXME: for now use this as a default.
     _target_address.component_id = MAV_COMP_ID_AUTOPILOT1;
@@ -72,6 +73,7 @@ void SystemImpl::init(uint8_t system_id, uint8_t comp_id, bool connected)
         [this](const mavlink_message_t& message) { process_autopilot_version(message); },
         this);
 
+    /**
     register_mavlink_command_handler(
         MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES,
         [this](const MavlinkCommandReceiver::CommandLong& command) {
@@ -86,7 +88,7 @@ void SystemImpl::init(uint8_t system_id, uint8_t comp_id, bool connected)
             return make_command_ack_message(command, MAV_RESULT::MAV_RESULT_UNSUPPORTED);
         },
         this);
-
+**/
     add_new_component(comp_id);
 }
 
@@ -274,7 +276,7 @@ void SystemImpl::system_thread()
 
         if (_time.elapsed_since_s(last_ping_time) >= SystemImpl::_ping_interval_s) {
             if (_connected) {
-                _ping.run_once();
+               // _ping.run_once();
             }
             last_ping_time = _time.steady_time();
         }
@@ -463,6 +465,11 @@ bool SystemImpl::send_message(mavlink_message_t& message)
 
 #if MESSAGE_DEBUGGING == 1
     LogDebug() << "Sending msg " << size_t(message.msgid);
+    if (message.msgid == MAVLINK_MSG_ID_COMMAND_LONG)
+    {   mavlink_command_long_t cmd;
+        mavlink_msg_command_long_decode(&message, &cmd);
+        LogDebug() << "Cmd Long " << cmd.command;
+    }
 #endif
     return _parent.send_message(message);
 }
