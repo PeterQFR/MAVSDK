@@ -17,3 +17,4 @@ CMakeLists.txt.user*
 
 tools/docs
 venv/
+*.swp
