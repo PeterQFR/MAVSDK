@@ -551,7 +551,7 @@ void MavsdkImpl::call_user_callback_located(
             << "User callback queue overflown\n"
                "See: https://mavsdk.mavlink.io/main/en/cpp/troubleshooting.html#user_callbacks";
 
-    } else if (callback_size == 100) {
+    } else if (callback_size == 2000) {
         return;
     }
 
