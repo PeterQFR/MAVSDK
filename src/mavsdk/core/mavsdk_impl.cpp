@@ -541,12 +541,12 @@ void MavsdkImpl::call_user_callback_located(
     const std::string& filename, const int linenumber, const std::function<void()>& func)
 {
     auto callback_size = _user_callback_queue.size();
-    if (callback_size == 10) {
+    if (callback_size == 200) {
         LogWarn()
             << "User callback queue too slow.\n"
                "See: https://mavsdk.mavlink.io/main/en/cpp/troubleshooting.html#user_callbacks";
 
-    } else if (callback_size == 99) {
+    } else if (callback_size == 1999) {
         LogErr()
             << "User callback queue overflown\n"
                "See: https://mavsdk.mavlink.io/main/en/cpp/troubleshooting.html#user_callbacks";
